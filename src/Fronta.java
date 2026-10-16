@@ -1,84 +1,98 @@
 import java.util.Scanner;
 
 public class Fronta {
-    Scanner sc = new Scanner(System.in);
+    private Scanner sc = new Scanner(System.in);
 
-    private int kapacita = 20;
-    private Uchazec[] fronta = new Uchazec[kapacita];
-    private int front = 0;
-    private int rear = -1;
-    private int size = 0;
+    private Node front;
+    private Node rear;
+    private int size;
 
+    public Fronta() {
+        this.front = null;
+        this.rear = null;
+        this.size = 0;
+    }
 
     public void pridatUchazece(Uchazec uchazec) {
-        if (size >= kapacita) {
-            throw new FullFrontaException("Fronta je plná. Nelze přidat žáka: " + uchazec.getCeleJmeno());
+        Node newNode = new Node(uchazec);
+        if (rear == null) {
+            front = newNode;
+            rear = newNode;
+        } else {
+            rear.setNext(newNode);
+            rear = newNode;
         }
-        rear = (rear + 1) % kapacita;
-        fronta[rear] = uchazec;
         size++;
         System.out.println("Žák " + uchazec.getCeleJmeno() + " se zařadil do fronty.");
     }
 
     public Uchazec obslouzitUchazece() {
-        if (size == 0) {
+        if (front == null) {
             throw new EmptyFrontaException("Fronta je prázdná");
         }
-        Uchazec obslouzeny = fronta[front];
-        fronta[front] = null;
-        front = (front + 1) % kapacita;
+        Uchazec obslouzeny = front.getData();
+        front = front.getNext();
+        if (front == null) {
+            rear = null;
+        }
         size--;
 
-        System.out.println("Obsloužen uchazeč: " + obslouzeny.getCeleJmeno());
+        System.out.println("Obsloužen uchazeč: " + obslouzeny.getCeleJmeno() + " | " + obslouzeny.getPozice());
         return obslouzeny;
     }
 
     public void vypisFrontu() {
-        if (size == 0) {
+        if (front == null) {
             throw new EmptyFrontaException("Fronta je prázdná");
         }
 
-        System.out.println("Uchazeči ve frontě (" + size + "/" + kapacita + ")");
-        for (int i = 0; i < size; i++) {
-            int index = (front + i) % kapacita;
-            System.out.println((i + 1) + ". " + fronta[index].getCeleJmeno());
+        System.out.println("Uchazeči ve frontě (počet: " + size + ")");
+        Node current = front;
+        int i = 1;
+        while (current != null) {
+            Uchazec uchazec = current.getData();
+            System.out.println(i + ". " + uchazec.getCeleJmeno() + " | " + uchazec.getVzdělání()
+                    + " | " + uchazec.getPozice() + " | " + uchazec.getVek());
+            current = current.getNext();
+            i++;
         }
     }
 
     public Uchazec nakouknoutNaDalsiho() {
-        if (size == 0) {
+        if (front == null) {
             throw new EmptyFrontaException("Fronta je prázdná");
         }
-        Uchazec dalsiNaRade = fronta[front];
+        Uchazec dalsiNaRade = front.getData();
 
         System.out.println("Nakouknutí na dalšího: " + dalsiNaRade.getCeleJmeno() + " Pozice: " + dalsiNaRade.getPozice());
         return dalsiNaRade;
     }
 
     public Uchazec nakouknoutDoFronty() {
-        if (size == 0) {
+        if (front == null) {
             throw new EmptyFrontaException("Fronta je prázdná");
         }
 
         System.out.println("Zadejte příjmení žáka.");
         String hledanePrijmeni = sc.nextLine();
 
-        for (int i = 0; i < size; i++) {
-            int index = (front + i) % kapacita;
-
-            if (hledanePrijmeni.equalsIgnoreCase(fronta[index].getPrijmeni())) {
+        Node current = front;
+        while (current != null) {
+            Uchazec uchazec = current.getData();
+            if (hledanePrijmeni.equalsIgnoreCase(uchazec.getPrijmeni())) {
                 System.out.println("Žák s daným příjmením byl nalezen.");
-                System.out.println(fronta[index].getCeleJmeno());
-                return fronta[index];
+                System.out.println(uchazec.getCeleJmeno());
+                return uchazec;
             }
+            current = current.getNext();
         }
 
         System.out.println("Žák s daným příjmením nebyl nalezen.");
         return null;
     }
 
-    public int getKapacita() {
-        return kapacita;
+    public boolean jePrazdna() {
+        return front == null;
     }
 
     public int getSize() {

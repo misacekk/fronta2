@@ -31,7 +31,8 @@ public class Main {
                 System.out.println("2. Obsloužení uchazeče.");
                 System.out.println("3. Výpis všech uchazečů ve frontě.");
                 System.out.println("4. Nakouknutí na dalšího.");
-                System.out.println("5. Konec.");
+                System.out.println("5. Nakouknutí do fronty.");
+                System.out.println("6. Konec.");
                 System.out.print("Volba: ");
 
                 int choice = sc.nextInt();
@@ -64,6 +65,9 @@ public class Main {
                         fronta.nakouknoutNaDalsiho();
                         break;
                     case 5:
+                        fronta.nakouknoutDoFronty();
+                        break;
+                    case 6:
                         System.out.println("Konec programu.");
                         on = false;
                         break;
