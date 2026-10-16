@@ -1,7 +1,12 @@
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.Scanner;
 
 public class Fronta {
     private Scanner sc = new Scanner(System.in);
+
+    private int pocetObslouzenych;
 
     private Node front;
     private Node rear;
@@ -36,8 +41,8 @@ public class Fronta {
             rear = null;
         }
         size--;
-
-        System.out.println("Obsloužen uchazeč: " + obslouzeny.getCeleJmeno() + " | " + obslouzeny.getPozice());
+        pocetObslouzenych++;
+        System.out.println("Obsloužen uchazeč: " + obslouzeny.getCeleJmeno() + " | " + obslouzeny.getPozice() + " | Celkový počet obsloužených je: " + pocetObslouzenych);
         return obslouzeny;
     }
 
@@ -80,15 +85,80 @@ public class Fronta {
         while (current != null) {
             Uchazec uchazec = current.getData();
             if (hledanePrijmeni.equalsIgnoreCase(uchazec.getPrijmeni())) {
-                System.out.println("Žák s daným příjmením byl nalezen.");
+                System.out.println("Uchazeč s daným příjmením byl nalezen.");
                 System.out.println(uchazec.getCeleJmeno());
                 return uchazec;
             }
             current = current.getNext();
         }
 
-        System.out.println("Žák s daným příjmením nebyl nalezen.");
+        System.out.println("Uchazeč s daným příjmením nebyl nalezen.");
         return null;
+    }
+
+    // 7. Filtrování podle pozice
+    public void vypisPodlePozice(String hledanaPozice) {
+        if (front == null) {
+            throw new EmptyFrontaException("Fronta je prázdná");
+        }
+
+        System.out.println("Uchazeči na pozici '" + hledanaPozice + "':");
+        Node current = front;
+        int i = 1;
+        boolean nalezen = false;
+        while (current != null) {
+            Uchazec uchazec = current.getData();
+            if (uchazec.getPozice().equalsIgnoreCase(hledanaPozice)) {
+                System.out.println(i + ". " + uchazec.getCeleJmeno() + " | " + uchazec.getVzdělání()
+                        + " | " + uchazec.getPozice() + " | " + uchazec.getVek());
+                nalezen = true;
+                i++;
+            }
+            current = current.getNext();
+        }
+
+        if (!nalezen) {
+            System.out.println("Žádný uchazeč hlásící se na pozici '" + hledanaPozice + "' nebyl nalezen.");
+        }
+    }
+
+    public Uchazec vymazatCelouFrontu() {
+        if (front == null) {
+            throw new EmptyFrontaException("Fronta je prázdná");
+        }
+
+        Uchazec posledniObslouzeny = null;
+
+        while (front != null) {
+            posledniObslouzeny = front.getData();
+            front = front.getNext();
+            size--;
+        }
+
+        rear = null;
+
+        System.out.println("Fronta byla vymazána.");
+        return posledniObslouzeny;
+    }
+
+    // 9. Uložení fronty do souboru
+    public void ulozitDoSouboru(String nazevSouboru) {
+        if (front == null) {
+            throw new EmptyFrontaException("Fronta je prázdná");
+        }
+
+        try (PrintWriter writer = new PrintWriter(new FileWriter(nazevSouboru))) {
+            Node current = front;
+            while (current != null) {
+                Uchazec uchazec = current.getData();
+                writer.println(uchazec.getJmeno() + ";" + uchazec.getPrijmeni() + ";"
+                        + uchazec.getVzdělání() + ";" + uchazec.getPozice() + ";" + uchazec.getVek());
+                current = current.getNext();
+            }
+            System.out.println("Fronta byla úspěšně uložena do souboru: " + nazevSouboru);
+        } catch (IOException e) {
+            System.out.println("Chyba při zápisu do souboru: " + e.getMessage());
+        }
     }
 
     public boolean jePrazdna() {

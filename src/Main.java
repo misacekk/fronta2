@@ -32,7 +32,11 @@ public class Main {
                 System.out.println("3. Výpis všech uchazečů ve frontě.");
                 System.out.println("4. Nakouknutí na dalšího.");
                 System.out.println("5. Nakouknutí do fronty.");
-                System.out.println("6. Konec.");
+                System.out.println("6. Implementace počítadla obsloužených.");
+                System.out.println("7. Filtrování podle pozice.");
+                System.out.println("8. Vymazání celé fronty.");
+                System.out.println("9. Ulož frontu do souboru.");
+                System.out.println("0. Konec.");
                 System.out.print("Volba: ");
 
                 int choice = sc.nextInt();
@@ -67,13 +71,24 @@ public class Main {
                     case 5:
                         fronta.nakouknoutDoFronty();
                         break;
-                    case 6:
+                    case 7:
+                        System.out.print("Zadejte pozici pro filtrování: ");
+                        String pozice = sc.nextLine();
+                        fronta.vypisPodlePozice(pozice);
+                        break;
+                    case 8:
+                        fronta.vymazatCelouFrontu();
+                        break;
+                    case 9:
+                        fronta.ulozitDoSouboru("fronta-ulozeni.txt");
+                        break;
+                    case 0:
                         System.out.println("Konec programu.");
                         on = false;
                         break;
                 }
             } catch (Exception e) {
-                System.out.println("Nastala chyba při zadávání dat. Zadejte správný formát.");
+                System.out.println("Chyba při zadávání.");
                 sc.nextLine();
             }
         }

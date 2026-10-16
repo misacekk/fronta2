@@ -1,0 +1,16 @@
+Jakub;Eismann;Střední škola;programátor;18
+Ondra;Musil;Vysoká škola;junior;21
+Daniel;Fuchs;Základní škola;webař;19
+Tomáš;Jedno;Střední škola;tester;19
+Lukáš;Novák;Vysoká škola;analytik;22
+Martin;Černý;Základní škola;kodér;16
+Jan;Kučera;Střední škola;networker;18
+Petr;Dvořák;Vysoká škola;datař;23
+Filip;Marek;Střední škola;bezpečák;17
+David;Krejčí;Základní škola;grafik;15
+Jiří;Veselý;Vysoká škola;vývojář;24
+Anna;Bílá;Střední škola;programátorka;18
+Tereza;Králová;Vysoká škola;markéťačka;21
+Kateřina;Benešová;Základní škola;webařka;16
+Matěj;Horák;Střední škola;junior;19
+Jakub;Pokorný;Vysoká škola;architekt;25
